@@ -9,13 +9,10 @@
 #include "Windows/PostWindowsApi.h"
 #include "Windows/HideWindowsPlatformTypes.h"
 
-void USTool::CopyImageToClipboard(const int32 width, const int32 height, const TArray<FColor>& imageData)
+bool USTool::CopyImageToClipboard(const int32 width, const int32 height, const TArray<FColor>& imageData)
 {
-    if (!OpenClipboard(NULL)) {
-        return;
-    }
-    EmptyClipboard();
 
+    bool bSuccess = true;
     // define dib header
     BITMAPINFOHEADER bitmapInfoHeader;
     ZeroMemory(&bitmapInfoHeader, sizeof(BITMAPINFOHEADER));
@@ -39,14 +36,14 @@ void USTool::CopyImageToClipboard(const int32 width, const int32 height, const T
     HANDLE hDIB = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, dibSize);
     if (hDIB == NULL) {
         CloseClipboard();
-        return;
+        return bSuccess = false;
     }
 
     LPVOID pDIB = GlobalLock(hDIB);
     if (pDIB == NULL) {
         GlobalFree(hDIB);
         CloseClipboard();
-        return;
+        return bSuccess = false;
     }
 
     // Copy the BITMAPINFOHEADER
@@ -69,25 +66,29 @@ void USTool::CopyImageToClipboard(const int32 width, const int32 height, const T
 
     GlobalUnlock(hDIB);
 
-    // Set clipboard data
+    if (!OpenClipboard(NULL) && EmptyClipboard()) {
+        UE_LOG(LogTemp, Warning, TEXT("unable to open clipboard and clear clipboard"), width, height);
+        return bSuccess=false;
+    }
+
+    // Set clipboard data and pass the ownership to system
     SetClipboardData(CF_DIB, hDIB);
 
     // Clean up
     CloseClipboard();
-    GlobalFree(hDIB);
 
-    //TArray<char> array;
-    //TCHAR* temp;
-    //FPlatformMisc::ClipboardCopy(array.GetData());
-
+    return bSuccess;
 }
 
-void USTool::CopyImageToClipboard(UTexture2D* texture2d)
+bool USTool::CopyImageToClipboard(UTexture2D* texture2d)
 {   
     //convert texture2d to TArray<FColor>
     int16 width = texture2d->PlatformData->Mips[0].SizeX;
     int16 height = texture2d->PlatformData->Mips[0].SizeY;
-    UE_LOG(LogTemp, Warning, TEXT(" width %d height %d"), width, height);
+    if (width == 0 || height == 0) {
+        UE_LOG(LogTemp, Warning, TEXT(" width or height can not be Zero"));
+        return false;
+    };
     FColor* pixels = static_cast<FColor*>(texture2d->PlatformData->Mips[0].BulkData.Lock(LOCK_READ_WRITE));
 
     TArray<FColor> data;
@@ -101,5 +102,5 @@ void USTool::CopyImageToClipboard(UTexture2D* texture2d)
     }
     texture2d->PlatformData->Mips[0].BulkData.Unlock();
 
-    CopyImageToClipboard(width, height, data);
+    return CopyImageToClipboard(width, height, data);
 }

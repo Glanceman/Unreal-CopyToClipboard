@@ -16,9 +16,9 @@ class COPYTOCLIPBOARD_API ASPlayerController : public APlayerController
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void MockCopyImage();
+	bool MockCopyImage();
 	UFUNCTION(BlueprintCallable)
-	void MockCopyTexture();
+	bool MockCopyTexture();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Test")

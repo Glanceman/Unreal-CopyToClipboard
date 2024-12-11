@@ -4,7 +4,7 @@
 #include "./SPlayerController.h"
 #include "../BlueprintFunctionLibrary/STool.h"
 
-void ASPlayerController::MockCopyImage()
+bool ASPlayerController::MockCopyImage()
 {
 	int32 width = 256;
 	int32 height = 256;
@@ -15,13 +15,13 @@ void ASPlayerController::MockCopyImage()
 		imageData[i] = FColor::Red;
 	}
 
-	USTool::CopyImageToClipboard(width, height, imageData);
+	return USTool::CopyImageToClipboard(width, height, imageData);
 }
 
-void ASPlayerController::MockCopyTexture()
+bool ASPlayerController::MockCopyTexture()
 {
-	if (IsValid(texture)) {
-		USTool::CopyImageToClipboard(texture);
+	if (!IsValid(texture)) {
+		return false;
 	}
-
+	return USTool::CopyImageToClipboard(texture);
 }

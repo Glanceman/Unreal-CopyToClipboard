@@ -16,8 +16,8 @@ class COPYTOCLIPBOARD_API USTool : public UBlueprintFunctionLibrary
 
 public:
 
-	static void CopyImageToClipboard(const int32 width, const int32 height, const TArray<FColor>& ImageData);
+	static bool CopyImageToClipboard(const int32 width, const int32 height, const TArray<FColor>& ImageData);
 
 
-	static void CopyImageToClipboard(UTexture2D* texture2d);
+	static bool CopyImageToClipboard(UTexture2D* texture2d);
 };
