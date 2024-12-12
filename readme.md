@@ -8,10 +8,10 @@
 
 ## Functions 
 ### Press Z to copy red image to clipboard
-<video src='https://youtu.be/3FEePfON-Ko'></video>
+[<video src='https://youtu.be/3FEePfON-Ko'></video>](https://www.youtube.com/watch?v=3FEePfON-Ko)
 
 ### Press X to copy texture to clipboard
-<video src='https://youtu.be/02HJQW1Au3w'></video>
+[<video src='https://youtu.be/02HJQW1Au3w'></video>](https://studio.youtube.com/video/02HJQW1Au3w/edit)
 
 ## Principle
 Use windows api for handling image data to clipboard 
