@@ -1,7 +1,11 @@
 # CopyClipboardImage
 
+## Sample
+https://github.com/Glanceman/Unreal-CopyToClipboard/releases/tag/Sample
+
 ## Environment
 1. UE5.3.2
+2. Windows 11 24h2
 
 ## Dev
 1. generate .sln by right the .uproject or generate through unreal editor
@@ -20,4 +24,4 @@ https://github.com/user-attachments/assets/d5517998-f604-45ca-b1b8-bcdf354630ce
 
 
 ## Principle
-Use windows api for handling image data to clipboard 
+Use windows api for handling image data to clipboard since `FPlatformMisc:ClipboardCopy(TChar* str)` is only for the UTF8 data
