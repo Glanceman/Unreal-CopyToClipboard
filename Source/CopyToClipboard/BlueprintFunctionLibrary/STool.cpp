@@ -83,13 +83,13 @@ bool USTool::CopyImageToClipboard(const int32 width, const int32 height, const T
 bool USTool::CopyImageToClipboard(UTexture2D* texture2d)
 {   
     //convert texture2d to TArray<FColor>
-    int16 width = texture2d->PlatformData->Mips[0].SizeX;
-    int16 height = texture2d->PlatformData->Mips[0].SizeY;
+    int16 width = texture2d->GetPlatformData()->Mips[0].SizeX;
+    int16 height = texture2d->GetPlatformData()->Mips[0].SizeY;
     if (width == 0 || height == 0) {
         UE_LOG(LogTemp, Warning, TEXT(" width or height can not be Zero"));
         return false;
     };
-    FColor* pixels = static_cast<FColor*>(texture2d->PlatformData->Mips[0].BulkData.Lock(LOCK_READ_WRITE));
+    FColor* pixels = static_cast<FColor*>(texture2d->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE));
 
     TArray<FColor> data;
     data.SetNum(width * height);
@@ -100,7 +100,7 @@ bool USTool::CopyImageToClipboard(UTexture2D* texture2d)
             data[y * width + x] = pixel;
         }
     }
-    texture2d->PlatformData->Mips[0].BulkData.Unlock();
+    texture2d->GetPlatformData()->Mips[0].BulkData.Unlock();
 
     return CopyImageToClipboard(width, height, data);
 }
